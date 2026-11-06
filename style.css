@@ -1,0 +1,794 @@
+/* ==========================================================================
+   Book List App - Modern Clean & Responsive Styles
+   ========================================================================== */
+
+/* --- CSS Variables / Design Tokens --- */
+:root {
+  --font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  
+  /* Color Palette */
+  --color-bg: #f8fafc;
+  --color-surface: #ffffff;
+  --color-surface-hover: #f1f5f9;
+  --color-border: #e2e8f0;
+  --color-border-focus: #6366f1;
+  
+  --color-text-main: #0f172a;
+  --color-text-muted: #64748b;
+  --color-text-light: #94a3b8;
+  
+  --color-primary: #4f46e5;
+  --color-primary-hover: #4338ca;
+  --color-primary-light: #eef2ff;
+  
+  --color-success-bg: #ecfdf5;
+  --color-success-text: #065f46;
+  --color-success-border: #a7f3d0;
+
+  --color-unread-bg: #fffbeb;
+  --color-unread-text: #92400e;
+  --color-unread-border: #fde68a;
+
+  --color-danger: #ef4444;
+  --color-danger-hover: #dc2626;
+  --color-danger-bg: #fef2f2;
+  --color-danger-border: #fecaca;
+
+  /* Elevation Shadows */
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.07), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -4px rgba(0, 0, 0, 0.04);
+  --shadow-modal: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+
+  /* Radius */
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
+  --radius-full: 9999px;
+
+  /* Transitions */
+  --transition-fast: 150ms ease;
+  --transition-normal: 200ms ease;
+}
+
+/* --- Base & Reset --- */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-family);
+  background-color: var(--color-bg);
+  color: var(--color-text-main);
+  line-height: 1.5;
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  padding: 16px;
+}
+
+/* --- Layout Container --- */
+.app-wrapper {
+  max-width: 720px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  min-height: calc(100vh - 32px);
+}
+
+/* --- Header --- */
+.app-header {
+  background-color: var(--color-surface);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--color-border);
+  box-shadow: var(--shadow-sm);
+  padding: 20px 24px;
+  margin-bottom: 20px;
+}
+
+.header-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.brand-icon {
+  width: 46px;
+  height: 46px;
+  border-radius: var(--radius-md);
+  background: var(--color-primary-light);
+  color: var(--color-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.brand h1 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--color-text-main);
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+}
+
+.tagline {
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+}
+
+.header-stats {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 4px;
+}
+
+.stat-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background-color: var(--color-primary-light);
+  padding: 6px 14px;
+  border-radius: var(--radius-full);
+  border: 1px solid rgba(79, 70, 229, 0.15);
+}
+
+.stat-label {
+  font-size: 0.82rem;
+  font-weight: 500;
+  color: var(--color-primary);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.stat-value {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--color-primary);
+}
+
+.stat-subtext {
+  font-size: 0.78rem;
+  color: var(--color-text-muted);
+}
+
+/* --- Cards --- */
+.card {
+  background-color: var(--color-surface);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--color-border);
+  box-shadow: var(--shadow-sm);
+  padding: 22px 24px;
+  margin-bottom: 20px;
+}
+
+.card-title {
+  font-size: 1.15rem;
+  font-weight: 600;
+  margin-bottom: 16px;
+  color: var(--color-text-main);
+  letter-spacing: -0.01em;
+}
+
+/* --- Form Styles --- */
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.form-group label {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--color-text-main);
+}
+
+.required {
+  color: var(--color-danger);
+}
+
+input[type="text"],
+input[type="search"] {
+  width: 100%;
+  padding: 10px 14px;
+  font-family: inherit;
+  font-size: 1rem; /* >= 16px prevents mobile safari auto-zoom */
+  color: var(--color-text-main);
+  background-color: var(--color-surface);
+  border: 1.5px solid var(--color-border);
+  border-radius: var(--radius-md);
+  outline: none;
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+input[type="text"]:focus,
+input[type="search"]:focus {
+  border-color: var(--color-border-focus);
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
+}
+
+input[type="text"]::placeholder,
+input[type="search"]::placeholder {
+  color: var(--color-text-light);
+}
+
+.form-error {
+  font-size: 0.78rem;
+  color: var(--color-danger);
+  min-height: 16px;
+  display: block;
+}
+
+.input-invalid {
+  border-color: var(--color-danger) !important;
+}
+
+.form-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 14px;
+  padding-top: 4px;
+}
+
+/* Custom Checkbox */
+.checkbox-container {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  user-select: none;
+  font-size: 0.92rem;
+  color: var(--color-text-main);
+  min-height: 36px;
+}
+
+.checkbox-container input[type="checkbox"] {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+}
+
+.custom-checkbox {
+  width: 20px;
+  height: 20px;
+  border-radius: var(--radius-sm);
+  border: 1.5px solid var(--color-border);
+  background-color: var(--color-surface);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: all var(--transition-fast);
+}
+
+.custom-checkbox svg {
+  width: 13px;
+  height: 13px;
+  stroke: #ffffff;
+  opacity: 0;
+  transform: scale(0.6);
+  transition: all var(--transition-fast);
+}
+
+.checkbox-container:hover .custom-checkbox {
+  border-color: var(--color-border-focus);
+}
+
+.checkbox-container input[type="checkbox"]:focus-visible + .custom-checkbox {
+  outline: 2px solid var(--color-border-focus);
+  outline-offset: 2px;
+}
+
+.checkbox-container input[type="checkbox"]:checked + .custom-checkbox {
+  background-color: var(--color-primary);
+  border-color: var(--color-primary);
+}
+
+.checkbox-container input[type="checkbox"]:checked + .custom-checkbox svg {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* --- Buttons --- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-family: inherit;
+  font-size: 0.92rem;
+  font-weight: 600;
+  padding: 10px 18px;
+  border-radius: var(--radius-md);
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  text-decoration: none;
+  min-height: 42px;
+  white-space: nowrap;
+}
+
+.btn:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+.btn-primary {
+  background-color: var(--color-primary);
+  color: #ffffff;
+}
+
+.btn-primary:hover {
+  background-color: var(--color-primary-hover);
+  box-shadow: 0 2px 4px rgba(79, 70, 229, 0.25);
+}
+
+.btn-secondary {
+  background-color: var(--color-surface);
+  border-color: var(--color-border);
+  color: var(--color-text-main);
+}
+
+.btn-secondary:hover {
+  background-color: var(--color-surface-hover);
+  border-color: #cbd5e1;
+}
+
+.btn-icon {
+  padding: 8px 12px;
+  font-size: 0.85rem;
+  min-height: 36px;
+  border-radius: var(--radius-sm);
+  background-color: transparent;
+}
+
+.btn-edit {
+  color: var(--color-text-muted);
+  border-color: var(--color-border);
+}
+
+.btn-edit:hover {
+  background-color: var(--color-surface-hover);
+  color: var(--color-text-main);
+  border-color: #cbd5e1;
+}
+
+.btn-delete {
+  color: var(--color-danger);
+  border-color: var(--color-border);
+}
+
+.btn-delete:hover {
+  background-color: var(--color-danger-bg);
+  border-color: var(--color-danger-border);
+  color: var(--color-danger-hover);
+}
+
+/* --- Search Section --- */
+.search-section {
+  margin-bottom: 20px;
+}
+
+.search-input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.search-icon {
+  position: absolute;
+  left: 14px;
+  color: var(--color-text-muted);
+  pointer-events: none;
+}
+
+.search-input-wrapper input {
+  padding-left: 42px;
+  padding-right: 40px;
+  background-color: var(--color-surface);
+  box-shadow: var(--shadow-sm);
+}
+
+.clear-search-btn {
+  position: absolute;
+  right: 10px;
+  background: none;
+  border: none;
+  color: var(--color-text-muted);
+  font-size: 1.3rem;
+  line-height: 1;
+  width: 28px;
+  height: 28px;
+  border-radius: var(--radius-full);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.clear-search-btn:hover {
+  background-color: var(--color-surface-hover);
+  color: var(--color-text-main);
+}
+
+/* --- Book List Section --- */
+.book-list-section {
+  flex: 1;
+}
+
+.list-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+  padding: 0 4px;
+}
+
+.list-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--color-text-main);
+}
+
+.search-status {
+  font-size: 0.82rem;
+  color: var(--color-text-muted);
+}
+
+.book-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* --- Book Card Item --- */
+.book-item {
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  padding: 16px 18px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast), border-color var(--transition-fast);
+}
+
+.book-item:hover {
+  box-shadow: var(--shadow-md);
+  border-color: #cbd5e1;
+}
+
+.book-info {
+  flex: 1;
+  min-width: 0; /* Ensures text truncation works if needed */
+}
+
+.book-title {
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--color-text-main);
+  word-break: break-word;
+  line-height: 1.3;
+  margin-bottom: 4px;
+}
+
+.book-author {
+  font-size: 0.9rem;
+  color: var(--color-text-muted);
+  word-break: break-word;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.book-author-name {
+  font-weight: 500;
+  color: #475569;
+}
+
+/* Meta row with status & action buttons */
+.book-meta {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-shrink: 0;
+}
+
+/* Status Badge / Toggle */
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 12px;
+  border-radius: var(--radius-full);
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+  user-select: none;
+  border: 1px solid transparent;
+  transition: all var(--transition-fast);
+  background: none;
+  font-family: inherit;
+}
+
+.status-badge:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 1px;
+}
+
+.status-badge.status-read {
+  background-color: var(--color-success-bg);
+  color: var(--color-success-text);
+  border-color: var(--color-success-border);
+}
+
+.status-badge.status-read:hover {
+  background-color: #d1fae5;
+}
+
+.status-badge.status-unread {
+  background-color: var(--color-unread-bg);
+  color: var(--color-unread-text);
+  border-color: var(--color-unread-border);
+}
+
+.status-badge.status-unread:hover {
+  background-color: #fef3c7;
+}
+
+.status-badge svg {
+  width: 13px;
+  height: 13px;
+  flex-shrink: 0;
+}
+
+.book-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* --- Empty States --- */
+.empty-state {
+  background-color: var(--color-surface);
+  border: 1px dashed var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: 48px 24px;
+  text-align: center;
+  margin-top: 8px;
+}
+
+.empty-icon-wrap {
+  width: 72px;
+  height: 72px;
+  margin: 0 auto 16px;
+  background-color: var(--color-bg);
+  border-radius: var(--radius-full);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-text-muted);
+}
+
+.empty-state h3 {
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: var(--color-text-main);
+  margin-bottom: 6px;
+}
+
+.empty-state p {
+  font-size: 0.92rem;
+  color: var(--color-text-muted);
+  max-width: 380px;
+  margin: 0 auto;
+}
+
+.empty-state.no-results .btn {
+  margin-top: 16px;
+}
+
+/* --- App Footer --- */
+.app-footer {
+  text-align: center;
+  padding: 24px 0 12px;
+  font-size: 0.8rem;
+  color: var(--color-text-light);
+  margin-top: auto;
+}
+
+/* --- Modal Dialog --- */
+.modal-dialog {
+  border: none;
+  border-radius: var(--radius-lg);
+  background: transparent;
+  padding: 0;
+  max-width: 520px;
+  width: calc(100% - 32px);
+  margin: auto;
+  overflow: visible;
+}
+
+.modal-dialog::backdrop {
+  background-color: rgba(15, 23, 42, 0.5);
+  backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
+  animation: fadeIn 150ms ease-out;
+}
+
+.modal-container {
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  overflow: hidden;
+  box-shadow: var(--shadow-modal);
+}
+
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.modal-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--color-text-main);
+}
+
+.modal-close-btn {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  line-height: 1;
+  color: var(--color-text-muted);
+  cursor: pointer;
+  padding: 4px;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-sm);
+  transition: all var(--transition-fast);
+}
+
+.modal-close-btn:hover {
+  background-color: var(--color-surface-hover);
+  color: var(--color-text-main);
+}
+
+.modal-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 20px;
+}
+
+/* Fallback for browsers or states where <dialog> is styled as open */
+.modal-dialog[open] {
+  animation: modalPop 200ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes modalPop {
+  from {
+    opacity: 0;
+    transform: scale(0.96) translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+/* --- Mobile Responsiveness --- */
+@media (max-width: 640px) {
+  body {
+    padding: 12px 10px;
+  }
+
+  .app-header {
+    padding: 16px;
+    margin-bottom: 14px;
+  }
+
+  .header-inner {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .header-stats {
+    align-items: flex-start;
+    width: 100%;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px solid var(--color-border);
+    padding-top: 10px;
+  }
+
+  .card {
+    padding: 16px;
+    margin-bottom: 14px;
+  }
+
+  .form-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .form-footer {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+  }
+
+  .form-footer .btn-primary {
+    width: 100%;
+  }
+
+  /* Book Card Layout on Phone */
+  .book-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 14px;
+    padding: 14px;
+  }
+
+  .book-info {
+    width: 100%;
+  }
+
+  .book-meta {
+    width: 100%;
+    justify-content: space-between;
+    border-top: 1px dashed var(--color-border);
+    padding-top: 12px;
+  }
+
+  .modal-container {
+    padding: 18px 16px;
+  }
+
+  .modal-actions {
+    flex-direction: column-reverse;
+  }
+
+  .modal-actions .btn {
+    width: 100%;
+  }
+}
