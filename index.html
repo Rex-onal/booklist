@@ -69,6 +69,33 @@
             </div>
           </div>
 
+          <!-- Star Rating Picker -->
+          <div class="form-row rating-row">
+            <span class="rating-label">Rating:</span>
+            <div class="rating-picker-wrapper">
+              <div class="star-rating-picker" id="addRatingPicker" role="radiogroup" aria-label="Book Rating (1 to 5 stars)">
+                <button type="button" class="star-btn" data-value="1" aria-label="1 star" title="1 star">
+                  <svg class="star-icon" viewBox="0 0 24 24" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                </button>
+                <button type="button" class="star-btn" data-value="2" aria-label="2 stars" title="2 stars">
+                  <svg class="star-icon" viewBox="0 0 24 24" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                </button>
+                <button type="button" class="star-btn" data-value="3" aria-label="3 stars" title="3 stars">
+                  <svg class="star-icon" viewBox="0 0 24 24" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                </button>
+                <button type="button" class="star-btn" data-value="4" aria-label="4 stars" title="4 stars">
+                  <svg class="star-icon" viewBox="0 0 24 24" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                </button>
+                <button type="button" class="star-btn" data-value="5" aria-label="5 stars" title="5 stars">
+                  <svg class="star-icon" viewBox="0 0 24 24" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                </button>
+              </div>
+              <span class="rating-text" id="addRatingText">No rating</span>
+              <button type="button" class="clear-rating-btn" id="addRatingClear" title="Clear rating" aria-label="Clear rating" hidden>&times;</button>
+            </div>
+            <input type="hidden" id="bookRating" name="rating" value="0">
+          </div>
+
           <div class="form-footer">
             <label class="checkbox-container" for="bookRead">
               <input type="checkbox" id="bookRead" name="isRead">
@@ -195,6 +222,33 @@
             autocomplete="off"
           >
           <span class="form-error" id="editAuthorError" role="alert"></span>
+        </div>
+
+        <!-- Edit Modal Star Rating Picker -->
+        <div class="form-group">
+          <span class="rating-label">Rating:</span>
+          <div class="rating-picker-wrapper">
+            <div class="star-rating-picker" id="editRatingPicker" role="radiogroup" aria-label="Book Rating (1 to 5 stars)">
+              <button type="button" class="star-btn" data-value="1" aria-label="1 star" title="1 star">
+                <svg class="star-icon" viewBox="0 0 24 24" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+              </button>
+              <button type="button" class="star-btn" data-value="2" aria-label="2 stars" title="2 stars">
+                <svg class="star-icon" viewBox="0 0 24 24" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+              </button>
+              <button type="button" class="star-btn" data-value="3" aria-label="3 stars" title="3 stars">
+                <svg class="star-icon" viewBox="0 0 24 24" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+              </button>
+              <button type="button" class="star-btn" data-value="4" aria-label="4 stars" title="4 stars">
+                <svg class="star-icon" viewBox="0 0 24 24" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+              </button>
+              <button type="button" class="star-btn" data-value="5" aria-label="5 stars" title="5 stars">
+                <svg class="star-icon" viewBox="0 0 24 24" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+              </button>
+            </div>
+            <span class="rating-text" id="editRatingText">No rating</span>
+            <button type="button" class="clear-rating-btn" id="editRatingClear" title="Clear rating" aria-label="Clear rating" hidden>&times;</button>
+          </div>
+          <input type="hidden" id="editBookRating" name="editRating" value="0">
         </div>
 
         <div class="form-group">

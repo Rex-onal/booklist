@@ -46,6 +46,20 @@
   const closeModalBtn = document.getElementById('closeModalBtn');
   const cancelEditBtn = document.getElementById('cancelEditBtn');
 
+  // Star Rating Picker Elements
+  const addRatingPickerEl = document.getElementById('addRatingPicker');
+  const bookRatingInput = document.getElementById('bookRating');
+  const addRatingTextEl = document.getElementById('addRatingText');
+  const addRatingClearBtn = document.getElementById('addRatingClear');
+
+  const editRatingPickerEl = document.getElementById('editRatingPicker');
+  const editBookRatingInput = document.getElementById('editBookRating');
+  const editRatingTextEl = document.getElementById('editRatingText');
+  const editRatingClearBtn = document.getElementById('editRatingClear');
+
+  let addPickerControl = null;
+  let editPickerControl = null;
+
   // --- LocalStorage Helpers ---
   function loadBooksFromStorage() {
     try {
@@ -111,8 +125,111 @@
     return books.filter(book => {
       const titleMatch = book.title && book.title.toLowerCase().includes(q);
       const authorMatch = book.author && book.author.toLowerCase().includes(q);
-      return titleMatch || authorMatch;
+      const ratingMatch = book.rating && `${book.rating} star`.includes(q);
+      return titleMatch || authorMatch || Boolean(ratingMatch);
     });
+  }
+
+  // --- Star Rating Helpers ---
+  function renderCardStars(book) {
+    const rating = parseInt(book.rating, 10) || 0;
+    let starsHtml = '';
+    for (let i = 1; i <= 5; i++) {
+      const isFilled = i <= rating;
+      const fillClass = isFilled ? 'star-filled' : 'star-empty';
+      starsHtml += `
+        <button 
+          type="button" 
+          class="card-star-btn ${fillClass}" 
+          data-action="quick-rate" 
+          data-rating="${i}" 
+          aria-label="Rate ${i} star${i > 1 ? 's' : ''}" 
+          title="Rate ${i} star${i > 1 ? 's' : ''}"
+        >
+          <svg class="star-icon" viewBox="0 0 24 24" aria-hidden="true">
+            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+          </svg>
+        </button>
+      `;
+    }
+
+    const badgeHtml = rating > 0
+      ? `<span class="rating-badge">${rating} / 5</span>`
+      : `<span class="rating-badge rating-unrated">Unrated</span>`;
+
+    return `
+      <div class="book-card-rating">
+        <div class="stars-display" role="group" aria-label="Book rating: ${rating ? rating + ' out of 5 stars' : 'Unrated'}">
+          ${starsHtml}
+        </div>
+        ${badgeHtml}
+      </div>
+    `;
+  }
+
+  function setupRatingPicker(pickerEl, hiddenInputEl, textEl, clearBtnEl) {
+    if (!pickerEl || !hiddenInputEl) return null;
+
+    const starButtons = pickerEl.querySelectorAll('.star-btn');
+
+    function updateUI(rating, isHover) {
+      const numRating = parseInt(rating, 10) || 0;
+      starButtons.forEach(btn => {
+        const val = parseInt(btn.dataset.value, 10);
+        if (isHover) {
+          btn.classList.toggle('is-hovered', val <= numRating);
+        } else {
+          btn.classList.remove('is-hovered');
+          btn.classList.toggle('is-active', val <= numRating);
+        }
+      });
+
+      if (!isHover) {
+        hiddenInputEl.value = numRating.toString();
+        if (textEl) {
+          textEl.textContent = numRating > 0 ? `${numRating} star${numRating > 1 ? 's' : ''}` : 'No rating';
+        }
+        if (clearBtnEl) {
+          clearBtnEl.hidden = numRating === 0;
+        }
+      }
+    }
+
+    pickerEl.addEventListener('click', function (e) {
+      const btn = e.target.closest('.star-btn');
+      if (!btn) return;
+      const clickedVal = parseInt(btn.dataset.value, 10);
+      const currentVal = parseInt(hiddenInputEl.value, 10) || 0;
+      const nextVal = (currentVal === clickedVal) ? 0 : clickedVal;
+      updateUI(nextVal, false);
+    });
+
+    pickerEl.addEventListener('mouseover', function (e) {
+      const btn = e.target.closest('.star-btn');
+      if (!btn) return;
+      const hoverVal = parseInt(btn.dataset.value, 10);
+      updateUI(hoverVal, true);
+    });
+
+    pickerEl.addEventListener('mouseleave', function () {
+      const currentVal = parseInt(hiddenInputEl.value, 10) || 0;
+      updateUI(currentVal, false);
+    });
+
+    if (clearBtnEl) {
+      clearBtnEl.addEventListener('click', function () {
+        updateUI(0, false);
+      });
+    }
+
+    return {
+      setRating: function (r) {
+        updateUI(r, false);
+      },
+      getRating: function () {
+        return parseInt(hiddenInputEl.value, 10) || 0;
+      }
+    };
   }
 
   // --- Render Book List ---
@@ -159,6 +276,7 @@
         <div class="book-info">
           <h3 class="book-title">${sanitizeHTML(book.title)}</h3>
           <p class="book-author">by <span class="book-author-name">${sanitizeHTML(book.author)}</span></p>
+          ${renderCardStars(book)}
         </div>
         <div class="book-meta">
           <button 
@@ -245,10 +363,13 @@
 
     if (hasError) return;
 
+    const ratingVal = addPickerControl ? addPickerControl.getRating() : 0;
+
     const newBook = {
       id: generateId(),
       title: titleVal,
       author: authorVal,
+      rating: ratingVal,
       isRead: isReadVal,
       createdAt: Date.now()
     };
@@ -259,6 +380,9 @@
 
     // Reset Form
     addBookForm.reset();
+    if (addPickerControl) {
+      addPickerControl.setRating(0);
+    }
     clearAddErrors();
     bookTitleInput.focus();
   });
@@ -292,7 +416,14 @@
 
     const action = actionBtn.dataset.action;
 
-    if (action === 'toggle-read') {
+    if (action === 'quick-rate') {
+      const clickedRating = parseInt(actionBtn.dataset.rating, 10);
+      const currentRating = parseInt(book.rating, 10) || 0;
+      // If clicking the current rating, toggle it to unrated (0), otherwise set to clicked star
+      book.rating = (currentRating === clickedRating) ? 0 : clickedRating;
+      saveBooksToStorage();
+      render();
+    } else if (action === 'toggle-read') {
       book.isRead = !book.isRead;
       saveBooksToStorage();
       render();
@@ -327,6 +458,9 @@
     editBookTitleInput.value = book.title;
     editBookAuthorInput.value = book.author;
     editBookReadInput.checked = Boolean(book.isRead);
+    if (editPickerControl) {
+      editPickerControl.setRating(book.rating || 0);
+    }
 
     if (typeof editModal.showModal === 'function') {
       editModal.showModal();
@@ -400,8 +534,10 @@
 
     const bookIndex = books.findIndex(b => b.id === id);
     if (bookIndex !== -1) {
+      const ratingVal = editPickerControl ? editPickerControl.getRating() : 0;
       books[bookIndex].title = titleVal;
       books[bookIndex].author = authorVal;
+      books[bookIndex].rating = ratingVal;
       books[bookIndex].isRead = isReadVal;
 
       saveBooksToStorage();
@@ -445,6 +581,8 @@
 
   // --- Initialization ---
   function init() {
+    addPickerControl = setupRatingPicker(addRatingPickerEl, bookRatingInput, addRatingTextEl, addRatingClearBtn);
+    editPickerControl = setupRatingPicker(editRatingPickerEl, editBookRatingInput, editRatingTextEl, editRatingClearBtn);
     books = loadBooksFromStorage();
     render();
   }

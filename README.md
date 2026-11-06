@@ -5,7 +5,8 @@ A clean, responsive, and minimalist Book List application built using only HTML,
 ## Features
 
 - **No Server or Database Needed**: 100% client-side with full `localStorage` persistence.
-- **Add New Books**: Easily track book title, author, and reading status (Read / To Read).
+- **Add New Books**: Easily track book title, author, rating (1 to 5 stars), and reading status (Read / To Read).
+- **Star Ratings (1 to 5 Stars)**: Interactive 5-star rating picker with instant click-to-rate directly on each book card or via the edit modal.
 - **Edit & Update**: Edit any book's details or quickly toggle read status with a single click.
 - **Delete with Confirmation**: Safeguards against accidental deletion with a confirmation prompt.
 - **Instant Search**: Live search filtering by book title or author.
@@ -18,3 +19,4 @@ A clean, responsive, and minimalist Book List application built using only HTML,
 - `index.html`: Semantic markup and app layout
 - `style.css`: Clean modern typography, responsive cards, and modal styles
 - `script.js`: State management, event handlers, and `localStorage` syncing
+
